@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MudletPackage>
+<MudletPackage version="1.0">
+    <ScriptPackage>
+        <ScriptGroup isActive="yes" isFolder="yes">
+            <name>ksys</name>
+            <packageName></packageName>
+            <script>-------------------------------------------------
+--         Put your Lua functions here.        --
+--                                             --
+-- Note that you can also use external Scripts --
+-------------------------------------------------
+ksys={}
+</script>
+            <eventHandlerList/>
+            <Script isActive="yes" isFolder="no">
+                <name>LinkedList</name>
+                <packageName></packageName>
+                <script>-------------------------------------------------
+--         Put your Lua functions here.        --
+--                                             --
+-- Note that you can also use external Scripts --
+-------------------------------------------------
+
+ksys.head = nil
+
+function ksys.add(action)
+	ksys.head = ksys._add(action,ksys.head)
+	if(gmcp.Char.Vitals.equilibrium == &quot;1&quot; and gmcp.Char.Vitals.balance == &quot;1&quot; ) then
+display(&quot;\n acting&quot;)
+		ksys.act()
+	end
+end
+
+function ksys._add(action,node)
+	if(node == nil) then
+		node = { pointer = nil, action = action }
+	else
+		node.pointer = ksys._add(action,node.pointer)
+	end
+	return node
+end
+
+function ksys.act()
+	if not (ksys.head == nil) then
+		send(ksys.head.action)
+		ksys.head = ksys.head.pointer
+	end
+end
+
+function ksys.has()
+	echo(&quot; &quot; .. (not (ksys.head == nil)))
+	return not (ksys.head == nil)
+end
+
+function ksys.abort()
+	ksys.head = nil
+end
+
+
+
+
+</script>
+                <eventHandlerList/>
+            </Script>
+            <Script isActive="yes" isFolder="no">
+                <name>ksys.gmcpVitals</name>
+                <packageName></packageName>
+                <script>-------------------------------------------------
+--         Put your Lua functions here.        --
+--                                             --
+-- Note that you can also use external Scripts --
+-------------------------------------------------
+
+function ksys.gmcpVitals()
+	echo(&quot;GMCP Event&quot;)
+	if(gmcp.Char.Vitals.equilibrium == &quot;1&quot;  and gmcp.Char.Vitals.balance == &quot;1&quot; ) then --and gmcp.Char.Vitals.balance == 1 
+		echo(&quot;testing&quot;)
+		ksys.act()
+	end
+end</script>
+                <eventHandlerList>
+                    <string>gmcp.Char.Vitals</string>
+                </eventHandlerList>
+            </Script>
+        </ScriptGroup>
+    </ScriptPackage>
+</MudletPackage>
